@@ -1,27 +1,31 @@
 const express = require('express');
-const productRouter = require("./routers/product.router")
-const cartRouter = require("./routers/cart.router")
-const userRouter = require("./routers/user.router")
-const { intialDbConnection } = require("./db/db.connect.js")
+
 const app = express();
 const bodyParser = require('body-parser')
 var cors = require('cors');
-
-
-
-var corsOptions = {
+const corsOptions = {
   origin: '*',
-  optionsSuccessStatus: 200,
+  credentials: true,
+  optionSuccessStatus: 200,
 }
+
 app.use(cors(corsOptions));
 app.use(express.json());
-
+const { intialDbConnection } = require("./db/db.connect.js")
 intialDbConnection()
+const userRouter = require("./routers/user.router")
+const productRouter = require("./routers/product.router")
+const wishlistRouter = require("./routers/wishlist.router")
+const cartRouter = require("./routers/cart.router")
+const checkoutRouter = require("./routers/checkout.router")
 
-app.use('/products', productRouter)
+const authentication = require("./middlewares/authentication");
+
 app.use('/user', userRouter)
-app.use('/cart', cartRouter)
-
+app.use('/products', productRouter)
+app.use('/cart', authentication, cartRouter)
+app.use('/wishlist', authentication, wishlistRouter)
+app.use('/checkout', checkoutRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello World!')

@@ -13,4 +13,4 @@ const intialDbConnection = async () => {
   }
 }
 
-    module.exports = { intialDbConnection }
+module.exports = { intialDbConnection }
